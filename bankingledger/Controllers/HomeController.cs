@@ -21,10 +21,7 @@ namespace BankingLedger.Controllers
 
             if (User.Identity.IsAuthenticated)
             {
-                _currentUser = _userManager.GetUserAsync(User).Result;
-
-                return RedirectToAction("Index", "project");
-
+                return RedirectToAction("Index", "LedgerAccount");
             }
             else
             {
