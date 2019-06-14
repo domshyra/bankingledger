@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -185,6 +186,13 @@ namespace BankingLedger.Controllers
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
+                    List<string> roles = new List<string>()
+                    {
+                        "Customer"
+                    };
+
+                    //Add new roles
+                    IdentityResult add = _userManager.AddToRolesAsync(user, roles).Result;
                     result = await _userManager.AddLoginAsync(user, info);
                     if (result.Succeeded)
                     {
