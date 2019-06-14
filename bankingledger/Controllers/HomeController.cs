@@ -1,17 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using BankingLedger.Entities;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BankingLedger.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private ApplicationUser _currentUser = new ApplicationUser();
+        private UserManager<ApplicationUser> _userManager;
+
+        public HomeController(UserManager<ApplicationUser> userManager)
+        {
+            _userManager = userManager;
+        }
+
+        [AllowAnonymous]
+        public ActionResult Index()
+        {
+
+            if (User.Identity.IsAuthenticated)
+            {
+                _currentUser = _userManager.GetUserAsync(User).Result;
+
+                return RedirectToAction("Index", "project");
+
+            }
+            else
+            {
+                return RedirectToAction("Login", "Account", new { returnUrl = string.Empty });
+            }
+
+        }
+
+        public ActionResult Registered()
         {
             return View();
         }
+
         public IActionResult Error()
         {
             return View();

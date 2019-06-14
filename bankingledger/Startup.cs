@@ -1,26 +1,37 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using BankingLedger.Entities;
+using BankingLedger.Interfaces;
+using BankingLedger.Providers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json.Serialization;
 
 namespace BankingLedger
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IHostingEnvironment env)
         {
-            Configuration = configuration;
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json",
+                    optional: false,
+                    reloadOnChange: true)
+                .AddEnvironmentVariables();
+
+            if (env.IsDevelopment())
+            {
+                builder.AddUserSecrets<Startup>();
+            }
+
+            Configuration = builder.Build();
         }
 
         public IConfiguration Configuration { get; }
@@ -45,8 +56,12 @@ namespace BankingLedger
                 .AddUserStore<UserStore<ApplicationUser, ApplicationRole, BankingLedgerContext, Guid, IdentityUserClaim<Guid>, ApplicationUserRole, IdentityUserLogin<Guid>, IdentityUserToken<Guid>, IdentityRoleClaim<Guid>>>()
                 .AddRoleStore<RoleStore<ApplicationRole, BankingLedgerContext, Guid, ApplicationUserRole, IdentityRoleClaim<Guid>>>();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+                .AddJsonOptions(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
 
+
+            services.AddTransient<IRepo, Repo>();
+            services.AddTransient<IAccountProvider, AccountProvider>();
 
             //auth
             services.AddAuthentication().AddMicrosoftAccount(microsoftOptions =>
@@ -67,11 +82,11 @@ namespace BankingLedger
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, RoleManager<ApplicationRole> roleManager)
         {
             //code for auto generating roles in the ASPNetRoles table
-            ApplicationRole customer = new ApplicationRole
-            {
-                Name = "Customer"
-            };
-            IdentityResult roleResult = roleManager.CreateAsync(customer).Result;
+            //ApplicationRole customer = new ApplicationRole
+            //{
+            //    Name = "Customer"
+            //};
+            //IdentityResult roleResult = roleManager.CreateAsync(customer).Result;
 
             if (env.IsDevelopment())
             {
@@ -87,6 +102,8 @@ namespace BankingLedger
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {

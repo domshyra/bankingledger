@@ -1,0 +1,32 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@using BankingLedger.Entities
+@using BankingLedger.ViewModels
+@model LoginViewModel
+@inject SignInManager<ApplicationUser> SignInManager
+
+@{
+    ViewData["Title"] = "Log in";
+}
+<div class="container d-flex justify-content-center mt-5">
+    <div class="col-8">
+        <div class="card loginpage">
+            <div class="card-header text-center">
+                <h4>Log in using your Office 365 account</h4>
+            </div>
+            <div class="card-body text-center">
+                <p>If you need to create a new account please use register.</p>
+            </div>
+            <div class="card-footer">
+                <form asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
+
+                    <button type="submit" class="btn btn-primary pull-left" id="Microsoft" name="provider" value="Microsoft" title="Register using your Microsoft account">Register</button>
+
+                    <button type="submit" class="btn btn-primary float-right" id="Microsoft" name="provider" value="Microsoft" title="Log in using your Microsoft account">Log in</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
