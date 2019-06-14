@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BankingLedger.Migrations
 {
-    [DbContext(typeof(BankingLedgerContext))]
+    [DbContext(typeof(BankingLedgerDBContext))]
     partial class BankingLedgerContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

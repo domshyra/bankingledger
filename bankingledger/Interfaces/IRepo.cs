@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using BankingLedger.Entities;
 
 namespace BankingLedger.Interfaces
 {
-    public class IRepo
+    public interface IRepo
     {
-
+        IEnumerable<Account> GetAccountsForUser(Guid userId);
+        
     }
 }

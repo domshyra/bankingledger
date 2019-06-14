@@ -46,15 +46,15 @@ namespace BankingLedger
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddDbContext<BankingLedgerContext>(options =>
+            services.AddDbContext<BankingLedgerDBContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<ApplicationUser, ApplicationRole>()
-                .AddEntityFrameworkStores<BankingLedgerContext>()
+                .AddEntityFrameworkStores<BankingLedgerDBContext>()
                 .AddDefaultTokenProviders()
-                .AddUserStore<UserStore<ApplicationUser, ApplicationRole, BankingLedgerContext, Guid, IdentityUserClaim<Guid>, ApplicationUserRole, IdentityUserLogin<Guid>, IdentityUserToken<Guid>, IdentityRoleClaim<Guid>>>()
-                .AddRoleStore<RoleStore<ApplicationRole, BankingLedgerContext, Guid, ApplicationUserRole, IdentityRoleClaim<Guid>>>();
+                .AddUserStore<UserStore<ApplicationUser, ApplicationRole, BankingLedgerDBContext, Guid, IdentityUserClaim<Guid>, ApplicationUserRole, IdentityUserLogin<Guid>, IdentityUserToken<Guid>, IdentityRoleClaim<Guid>>>()
+                .AddRoleStore<RoleStore<ApplicationRole, BankingLedgerDBContext, Guid, ApplicationUserRole, IdentityRoleClaim<Guid>>>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .AddJsonOptions(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
@@ -62,6 +62,7 @@ namespace BankingLedger
 
             services.AddTransient<IRepo, Repo>();
             services.AddTransient<IAccountProvider, AccountProvider>();
+            services.AddTransient<ILedgerAccountProvider, LedgerAccountProvider>();
 
             //auth
             services.AddAuthentication().AddMicrosoftAccount(microsoftOptions =>

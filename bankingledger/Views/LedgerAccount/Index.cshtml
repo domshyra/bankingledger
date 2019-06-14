@@ -1,1 +1,93 @@
-﻿<div class="h5">Welcome to your home page</div>
+﻿@using BankingLedger.ViewModels
+@model List<LedgerAccountViewModel>
+
+<script src="~/js/promise.js"></script>
+<script>
+    $(function () {
+        $("button[value='ballance-change-btn']").on("click", function (e) {
+            console.log('hit');
+        });
+
+        function updateBalance() {
+            //update summary chart, spec char, and spec grid
+            getJSON(url).then(function (val) {
+
+
+            }, function (error) {
+                console.log("Error updating balance div", error);
+            });
+        };
+    });
+</script>
+
+<div class="containter">
+    <h3 class="pb-3 mb-2">Accounts</h3>
+    <div class="row">
+
+
+        @foreach (LedgerAccountViewModel account in Model)
+        {
+            <div class="col-12 col-md-6">
+                <div class="card">
+                    <div class="card-header font-weight-bold">
+                        @account.Name
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-2 py-2">
+                            <div class="col-6">
+                                <h5 class="card-title mb-3 text-muted font-weight-light">Ballance</h5>
+                            </div>
+                            <div class="col-6">
+                                <h5 class="card-title text-right" id="balance-@account.AccountId">@account.Balance</h5>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <button class="btn btn-outline-success" type="button" id="deposit-@account.AccountId" name="ballance-change-btn">Deposit</button>
+                                    </div>
+                                    <input type="number" step="0.01" min=0 class="form-control" placeholder="0.00" aria-label="deposit" aria-describedby="deposit">
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="input-group mb-3">
+                                    <input type="number" step="0.01" min=0 class="form-control" placeholder="0.00" aria-label="withdraw" aria-describedby="withdraw">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-danger" type="button" id="withdraw-@account.AccountId" name="ballance-change-btn">Withdraw</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <a data-toggle="collapse" data-target="#collapseHistory-@account.AccountId" class="text-right nodecoration"  href="#">Show transaction history <i class="fas fa-chevron-down pl-1"></i></a>
+                            </div>
+                        </div>
+                        <div class="collapse" id="collapseHistory-@account.AccountId">
+                            <div class="row">
+                                <div class="col-12 py-1 mt-3">
+                                    <table class="table table-sm">
+                                        <thead>
+                                            <tr>
+                                                <td scope="col">Date</td>
+                                                <td scope="col">Amount</td>
+                                                <td scope="col">Ballance</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        }
+    </div>
+</div>

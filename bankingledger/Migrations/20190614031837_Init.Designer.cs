@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BankingLedger.Migrations
 {
-    [DbContext(typeof(BankingLedgerContext))]
+    [DbContext(typeof(BankingLedgerDBContext))]
     [Migration("20190614031837_Init")]
     partial class Init
     {

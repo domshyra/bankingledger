@@ -6,11 +6,11 @@ using System;
 
 namespace BankingLedger.Entities
 {
-    public partial class BankingLedgerContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid, IdentityUserClaim<Guid>, ApplicationUserRole, IdentityUserLogin<Guid>, IdentityRoleClaim<Guid>, IdentityUserToken<Guid>>
+    public partial class BankingLedgerDBContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid, IdentityUserClaim<Guid>, ApplicationUserRole, IdentityUserLogin<Guid>, IdentityRoleClaim<Guid>, IdentityUserToken<Guid>>
     {
         private string connectionString;
 
-        public BankingLedgerContext()
+        public BankingLedgerDBContext()
         {
             var builder = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json", optional: false);
@@ -20,7 +20,7 @@ namespace BankingLedger.Entities
             connectionString = configuration.GetConnectionString("DefaultConnection").ToString();
         }
 
-        public BankingLedgerContext(DbContextOptions<BankingLedgerContext> options)
+        public BankingLedgerDBContext(DbContextOptions<BankingLedgerDBContext> options)
             : base(options)
         {
             var builder = new ConfigurationBuilder()
