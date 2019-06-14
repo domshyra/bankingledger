@@ -32,7 +32,13 @@ namespace BankingLedger.Entities
         }
 
 
-        
+        public virtual DbSet<Account> Accounts { get; set; }
+        public virtual DbSet<Deposit> Deposits { get; set; }
+
+
+
+
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -62,8 +68,48 @@ namespace BankingLedger.Entities
 
             modelBuilder.HasAnnotation("ProductVersion", "2.2.0-rtm-35687");
 
-            
-            
+            modelBuilder.Entity<Account>(entity =>
+            {
+                entity.HasKey(key => key.Id);
+
+                entity.ToTable("Account");
+
+                entity.Property(e => e.Id);
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.Balance)
+                    .HasColumnType("decimal(18, 4)");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Accounts)
+                    .HasForeignKey(d => d.UserId);
+
+            });
+
+            modelBuilder.Entity<Deposit>(entity =>
+            {
+                entity.HasKey(key => key.Id);
+
+                entity.ToTable("Deposit");
+
+                entity.Property(e => e.Id);
+
+                entity.Property(e => e.AccountId);
+
+                entity.Property(e => e.Date)
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.Amount)
+                    .HasColumnType("decimal(18, 4)");
+
+                entity.HasOne(d => d.Account)
+                    .WithMany(p => p.Deposits)
+                    .HasForeignKey(d => d.AccountId);
+
+            });
+
         }
     }
 }

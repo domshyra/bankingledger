@@ -9,8 +9,10 @@ namespace BankingLedger.Entities
         public ApplicationUser()
         {
             UserRoles = new HashSet<ApplicationUserRole>();
+            Accounts = new HashSet<Account>();
         }
 
         public ICollection<ApplicationUserRole> UserRoles { get; set; }
+        public ICollection<Account> Accounts { get; set; }
     }
 }
