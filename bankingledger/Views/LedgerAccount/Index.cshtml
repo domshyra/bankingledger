@@ -28,12 +28,11 @@
         });
     });
     function withdrawal(accountId, amount, elementId) {
-        debugger;
         var url = makeURLString("@Url.Action("MakeWithdrawal", "LedgerAccount")", accountId, amount);
         getJSON(url).then(function (result) {
             if (result.Success) {
                 parseBallance(result.Ballance, elementId);
-                updateDepositHistory(elementId, accountId);
+                updateDepositHistory(accountId);
             }
             else {
                 (elementId).html(result.Ballance);
@@ -48,7 +47,7 @@
         var url = makeURLString("@Url.Action("MakeDeposit", "LedgerAccount")", accountId, amount);
         getJSON(url).then(function (result) {
             parseBallance(result, elementId);
-            updateDepositHistory(elementId, accountId);
+            updateDepositHistory(accountId);
         }, function (error) {
             console.log("Error deposit", error);
         });
@@ -59,13 +58,23 @@
     function parseBallance(ballance, id) {
         $(id).html(ballance);
     }
-    function updateDepositHistory(elementId, accountId) {
-        getJSON("@Url.Action("GetDepositHistory", "LedgerAccount")?accountId=" + accountId).then(function (result) {
-            debugger;
-            $(elementId).html(result);
+    function updateDepositHistory(accountId) {
 
-        }, function (error) {
-            console.log("Error updateDepositHistory", error);
+        $.ajax({
+            url: "@Url.Action("GetDepositHistory", "LedgerAccount")?accountId=" + accountId,
+            data: {
+                accountId: accountId
+            },
+            dataType: "html",
+            contentType: "application/json;",
+            success: function (data) {
+                var id = "#history-" + accountId;
+                $(id).html(data);
+            },
+            error: function (passParams) {
+                console.log("Error in updateDepositHistory ajax call.");
+                console.log(passParams);
+            }
         });
     }
 </script>
@@ -125,7 +134,10 @@
                         <div class="collapse" id="collapseHistory-@account.AccountId">
                             <div class="row">
                                 <div class="col-12 py-1 mt-3">
-                                    <partial name="_DepositHistory" model="account.DepositHistory" />
+                                    <div id="history-@account.AccountId">
+                                        <partial name="_DepositHistory" model="account.DepositHistory" />
+
+                                    </div>
                                 </div>
                             </div>
                         </div>
