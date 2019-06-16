@@ -108,7 +108,9 @@
 
         @if (Model.Count == 0)
         {
-            <p>Looks like you don't have an account yet. Would you like to <a href='@Url.Action("CreateNewAccount", "LedgerAccount")' class="nodecoration"></a>create a new one?</p>
+            <div class="col-12">
+                <p>Looks like you don't have an account yet. Would you like to <a href='@Url.Action("CreateNewAccount", "LedgerAccount")' class="text-primary">create a new one</a>?</p>
+            </div>
         }
 
         @foreach (LedgerAccountViewModel account in Model)
