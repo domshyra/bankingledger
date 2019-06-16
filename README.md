@@ -6,8 +6,8 @@ app created for AltSource
 
 ## To run this app ##
 
-1. In the Package Manager Console runt `Update-Database`
-2. uncomment role code in Startup. 
+1. In the Package Manager Console run `Update-Database`
+2. uncomment role code in Startup. This will add the Customer role to DB
 
 
 ### code in start up ###
