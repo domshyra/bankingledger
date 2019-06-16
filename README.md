@@ -6,7 +6,7 @@ app created for AltSource
 
 ## To run this app ##
 
-1. In the Package Manager Console run `Update-Database`
+1. In the Package Manager Console run `Update-Database` (powershell) or in the console run `dotnet ef database update`
 2. uncomment role code in Startup. This will add the Customer role to DB
 
 
