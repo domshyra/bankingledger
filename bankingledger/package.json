@@ -1,7 +1,7 @@
 {
-  "name": "domshyra",
+  "name": "bankingledger",
   "version": "1.0.0",
-  "description": "personal website",
+  "description": "world’s greatest banking ledger",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -16,14 +16,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/domshyra/domshyra.git"
+    "url": "git+https://github.com/domshyra/bankingledger.git"
   },
   "author": "dominic schira",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/domshyra/domshyra/issues"
+    "url": "https://github.com/domshyra/bankingledger/issues"
   },
-  "homepage": "https://github.com/domshyra/domshyra#readme",
+  "homepage": "https://github.com/domshyra/bankingledger#readme",
   "dependencies": {
     "bootstrap": ">=4.3.1",
     "font-awesome": "^4.7.0",
