@@ -19,4 +19,4 @@ This will add the Cutomer role to the DB. Delete that code once the app is run o
             //};
             //IdentityResult roleResult = roleManager.CreateAsync(customer).Result;`
 
-*note this will need to be deleted or uncoomment and the next star up. *
+*note this will need to be deleted or uncoomment and the next star up.*
