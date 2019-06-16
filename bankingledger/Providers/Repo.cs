@@ -83,5 +83,11 @@ namespace BankingLedger.Providers
         {
             return context.Deposits.Where(x => x.AccountId == accountId);
         }
+
+        public void CreateNewAccount(Account account)
+        {
+            context.Accounts.Add(account);
+            context.SaveChanges();
+        }
     }
 }

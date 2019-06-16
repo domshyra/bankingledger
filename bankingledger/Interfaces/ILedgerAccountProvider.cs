@@ -11,5 +11,6 @@ namespace BankingLedger.Interfaces
         string Deposit(decimal amount, int accountId);
         WithdrawMessage Withdrawal(decimal amount, int accountId);
         List<DepositViewModel> GetDepositHistory(int accountId);
+        void CreateNewAccount(CreateNewLedgerAccountViewModel form);
     }
 }

@@ -1,6 +1,11 @@
 ﻿@using BankingLedger.ViewModels
 @model List<LedgerAccountViewModel>
 
+
+@{
+    ViewBag.Title = "Accounts";
+}
+
 <script src="~/js/promise.js"></script>
 <script>
     $(function () {
@@ -41,7 +46,7 @@
         //update summary chart, spec char, and spec grid
         var url = makeURLString("@Url.Action("MakeDeposit", "LedgerAccount")", accountId, amount);
         getJSON(url).then(function (result) {
-            
+
             parseBallance(result, elementId)
 
         }, function (error) {
@@ -66,13 +71,16 @@
 </script>
 
 <div class="containter">
-    <h3 class="pb-3 mb-2">Accounts</h3>
+    <h3 class="pb-3 mb-2">
+        Accounts
+        <a class="btn btn-primary float-right" role="button" href='@Url.Action("CreateNewAccount", "LedgerAccount")'>Create new account</a>
+    </h3>
     <div class="row">
 
 
         @foreach (LedgerAccountViewModel account in Model)
         {
-            <div class="col-12 col-md-6">
+            <div class="col-12 col-md-6 mb-2 pb-2">
                 <div class="card">
                     <div class="card-header font-weight-bold">
                         @account.Name

@@ -3,6 +3,7 @@ using BankingLedger.ViewModels;
 using BankingLedger.Assemblers;
 using System;
 using System.Collections.Generic;
+using BankingLedger.Entities;
 
 namespace BankingLedger.Providers
 {
@@ -18,6 +19,18 @@ namespace BankingLedger.Providers
         public List<LedgerAccountViewModel> GetLedgerAccountViewModelsForUser(Guid userId)
         {
             return _repo.GetAccountsForUser(userId).MakeLedgerAccounts();
+        }
+
+        public void CreateNewAccount(CreateNewLedgerAccountViewModel form)
+        {
+            Account account = new Account
+            {
+                UserId = form.UserId,
+                Name = form.Name,
+                Ballance = 0
+            };
+
+            _repo.CreateNewAccount(account);
         }
 
         public string Deposit(decimal amount, int accountId)

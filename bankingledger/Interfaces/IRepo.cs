@@ -11,5 +11,6 @@ namespace BankingLedger.Interfaces
         decimal MakeWithdrawal(decimal amount, int accountId);
         decimal GetAccountBallance(int accountId);
         IEnumerable<Deposit> GetDeposits(int accountId);
+        void CreateNewAccount(Account account);
     }
 }

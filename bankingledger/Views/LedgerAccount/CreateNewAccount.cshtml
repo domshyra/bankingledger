@@ -1,0 +1,31 @@
+﻿@using BankingLedger.ViewModels
+@model CreateNewLedgerAccountViewModel
+
+@{
+    ViewBag.Title = "Create new account";
+}
+
+<script src="~/js/bootstrap-validation.js"></script>
+
+<div class="container">
+    <h2 class="bl-title">Create new account</h2>
+    <div class="bl-form">
+        <form asp-action="CreateNewAccount" asp-controller="LedgerAccount" method="post" class="form-horizontal needs-validation" novalidate>
+
+            <input asp-for="UserId" hidden />
+
+            <div class="form-row">
+                <div class="form-group col-6" id="rev-number-feild">
+                    <label asp-for="Name"></label>
+                    <input asp-for="Name" class="form-control" required/>
+                    <div class="invalid-feedback">
+                        @Html.DisplayNameFor(model => model.Name) is required.
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" type="submit" id="SubmitForm">Create</button>
+            <button style="display:none;" id="form-working-message" class="btn btn-primary" disabled><i class="fas fa-spinner glyphicon-spin"></i> Loading...</button>
+        </form>
+    </div>
+</div>

@@ -5,12 +5,14 @@ using System.Threading.Tasks;
 using BankingLedger.Entities;
 using BankingLedger.Interfaces;
 using BankingLedger.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace BankingLedger.Controllers
 {
+    [Authorize(Policy = "Customer")]
     public class LedgerAccountController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -28,6 +30,26 @@ namespace BankingLedger.Controllers
 
 
             return View(_ledgerAccountProvider.GetLedgerAccountViewModelsForUser(user.Id));
+        }
+
+        public async Task<ActionResult> CreateNewAccount()
+        {
+            ApplicationUser user = await _userManager.GetUserAsync(User);
+
+            CreateNewLedgerAccountViewModel model = new CreateNewLedgerAccountViewModel
+            {
+                UserId = user.Id
+            };
+
+            return View(model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateNewAccount(CreateNewLedgerAccountViewModel form)
+        {
+            _ledgerAccountProvider.CreateNewAccount(form);
+
+            return RedirectToAction("Index");
         }
 
         public string MakeDeposit(decimal amount, int accountId)
