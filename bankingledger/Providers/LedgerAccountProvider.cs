@@ -35,13 +35,17 @@ namespace BankingLedger.Providers
 
         public string Deposit(decimal amount, int accountId)
         {
+            //protect against invalid data.
+            amount = Math.Abs(amount);
             return _repo.MakeDeposit(amount, accountId).ToString("C");
         }
         public WithdrawMessage Withdrawal(decimal amount, int accountId)
         {
+            //protect against invalid data.
+            amount = Math.Abs(amount) * -1;
             decimal ballance = _repo.GetAccountBallance(accountId);
 
-            if (ballance <= amount)
+            if (ballance + amount < 0)
             {
                 return new WithdrawMessage
                 {

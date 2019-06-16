@@ -35,8 +35,8 @@
                 updateDepositHistory(accountId);
             }
             else {
-                (elementId).html(result.Ballance);
-                $("#withdrawal-alert").show();
+                $("#withdrawal-error").html(result.Ballance);
+                $("#withdrawal-alert").modal('show')
             }
         }, function (error) {
             console.log("Error withdrawal", error);
@@ -80,6 +80,26 @@
 </script>
 
 <div class="containter">
+
+    <div class="modal" tabindex="-1" role="dialog" id="withdrawal-alert">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Error</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h5 class="text-danger">Insufficient funds.</h5>
+                    <p>Ballance is only <txt id="withdrawal-error"></txt>.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <h3 class="pb-3 mb-2">
         Accounts
         <a class="btn btn-primary float-right" role="button" href='@Url.Action("CreateNewAccount", "LedgerAccount")'>Create new account</a>
@@ -148,11 +168,4 @@
             </div>
         }
     </div>
-</div>
-
-<div class="alert alert-danger alert-dismissible fade show" role="alert" id="withdrawal-alert" style="display:none">
-    <strong>Error!</strong> You don't have enough funds to make this withdrawal. Ballance is <txt id="withdrawal-error"></txt>.
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-    </button>
 </div>

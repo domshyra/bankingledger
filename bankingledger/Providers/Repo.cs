@@ -37,13 +37,14 @@ namespace BankingLedger.Providers
                 throw new ArgumentNullException();
             }
 
-            account.Ballance = account.Ballance - Math.Abs(amount);
+            //amount comes in negative
+            account.Ballance = account.Ballance + amount;
 
             Deposit deposit = new Deposit
             {
                 Date = DateTime.Now,
                 AccountId = accountId,
-                Amount = Math.Abs(amount) * -1,
+                Amount = amount,
                 Ballance = account.Ballance
             };
 
