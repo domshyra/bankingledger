@@ -52,10 +52,11 @@ namespace BankingLedger.Providers
 
             else
             {
+                string bal = _repo.MakeWithdrawal(amount, accountId).ToString("C");
                 return new WithdrawMessage
                 {
                     Success = true,
-                    Ballance = _repo.MakeDeposit(amount, accountId).ToString("C")
+                    Ballance = bal
                 };
             }
         }
