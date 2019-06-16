@@ -2,6 +2,7 @@
 using System.Linq;
 using BankingLedger.ViewModels;
 using BankingLedger.Entities;
+using BankingLedger.Assemblers;
 
 namespace BankingLedger.Assemblers
 {
@@ -9,12 +10,17 @@ namespace BankingLedger.Assemblers
     {
         public static LedgerAccountViewModel MakeLedgerAccount(this Account source)
         {
-            return new LedgerAccountViewModel
+            LedgerAccountViewModel ledgerAccountViewModel = new LedgerAccountViewModel
             {
                 AccountId = source.Id,
                 Balance = source.Ballance.ToString("C"),
                 Name = source.Name
+
             };
+
+            ledgerAccountViewModel.DepositHistory = source.Deposits.MakeDeposits();
+
+            return ledgerAccountViewModel;
         }
 
         public static List<LedgerAccountViewModel> MakeLedgerAccounts(this IEnumerable<Account> source)

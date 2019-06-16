@@ -8,7 +8,8 @@ namespace BankingLedger.Interfaces
     {
         List<LedgerAccountViewModel> GetLedgerAccountViewModelsForUser(Guid userId);
 
-        decimal Deposit(decimal amount, int accountId);
-        decimal Withdrawal(decimal amount, int accountId);
+        string Deposit(decimal amount, int accountId);
+        WithdrawMessage Withdrawal(decimal amount, int accountId);
+        List<DepositViewModel> GetDepositHistory(int accountId);
     }
 }

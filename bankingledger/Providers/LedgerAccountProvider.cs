@@ -20,13 +20,35 @@ namespace BankingLedger.Providers
             return _repo.GetAccountsForUser(userId).MakeLedgerAccounts();
         }
 
-        public decimal Deposit(decimal amount, int accountId)
+        public string Deposit(decimal amount, int accountId)
         {
-            return _repo.MakeDeposit(amount, accountId);
+            return _repo.MakeDeposit(amount, accountId).ToString("C");
         }
-        public decimal Withdrawal(decimal amount, int accountId)
+        public WithdrawMessage Withdrawal(decimal amount, int accountId)
         {
-            return _repo.MakeDeposit(amount, accountId);
+            decimal ballance = _repo.GetAccountBallance(accountId);
+
+            if (ballance <= amount)
+            {
+                return new WithdrawMessage
+                {
+                    Success = false,
+                    Ballance = ballance.ToString("C")
+                };
+            }
+
+            else
+            {
+                return new WithdrawMessage
+                {
+                    Success = true,
+                    Ballance = _repo.MakeDeposit(amount, accountId).ToString("C")
+                };
+            }
+        }
+        public List<DepositViewModel> GetDepositHistory(int accountId)
+        {
+            return _repo.GetDeposits(accountId).MakeDeposits();
         }
     }
 }

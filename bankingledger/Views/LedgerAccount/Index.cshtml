@@ -4,20 +4,65 @@
 <script src="~/js/promise.js"></script>
 <script>
     $(function () {
-        $("button[value='ballance-change-btn']").on("click", function (e) {
-            console.log('hit');
+        $("button[name='ballance-change-btn']").on("click", function (e) {
+            var element = $(this);
+            var elementId = element.attr("id");
+            var input = $("#" + elementId + "-input");
+            var value = $("#" + elementId + "-input").val();
+            if (elementId.includes("deposit")) {
+                var accountId = elementId.replace("deposit-", "");
+                var ballanceId = "#ballance-" + accountId;
+                deposit(accountId, value, ballanceId);
+            }
+            else {
+                var accountId = elementId.replace("withdrawal-", "");
+                var ballanceId = "#ballance-" + accountId;
+                withdrawal(accountId, value, ballanceId);
+            }
+            input.html('');
         });
-
-        function updateBalance() {
-            //update summary chart, spec char, and spec grid
-            getJSON(url).then(function (val) {
-
-
-            }, function (error) {
-                console.log("Error updating balance div", error);
-            });
-        };
     });
+    function withdrawal(accountId, amount, elementId) {
+        var url = makeURLString("@Url.Action("MakeWithdrawal", "LedgerAccount")", accountId, amount);
+        getJSON(url).then(function (result) {
+            if (result.Success === "True") {
+                parseBallance(result.Ballance, elementId);
+            }
+            else {
+                (elementId).html(result.Ballance);
+                $("#withdrawal-alert").show();
+            }
+        }, function (error) {
+            console.log("Error withdrawal", error);
+        });
+    };
+    function deposit(accountId, amount, elementId) {
+        debugger;
+        //update summary chart, spec char, and spec grid
+        var url = makeURLString("@Url.Action("MakeDeposit", "LedgerAccount")", accountId, amount);
+        getJSON(url).then(function (result) {
+            
+            parseBallance(result, elementId)
+
+        }, function (error) {
+            console.log("Error deposit", error);
+        });
+    };
+    function makeURLString(url, accountId, amount) {
+        return url + "?accountId=" + accountId + "&amount=" + amount;
+    };
+    function parseBallance(ballance, id) {
+        debugger;
+        $(id).html(ballance);
+    }
+    function updateDepositHistory(elementId, accountId) {
+        getJSON("@Url.Action("GetDepositHistory", "LedgerAccount")?accountId=" + accountId).then(function (result) {
+            $(elementId).html(result);
+
+        }, function (error) {
+            console.log("Error updateDepositHistory", error);
+        });
+    }
 </script>
 
 <div class="containter">
@@ -38,7 +83,7 @@
                                 <h5 class="card-title mb-3 text-muted font-weight-light">Ballance</h5>
                             </div>
                             <div class="col-6">
-                                <h5 class="card-title text-right" id="balance-@account.AccountId">@account.Balance</h5>
+                                <h5 class="card-title text-right" id="ballance-@account.AccountId">@account.Balance</h5>
                             </div>
                         </div>
                         <div class="row">
@@ -47,14 +92,14 @@
                                     <div class="input-group-prepend">
                                         <button class="btn btn-outline-success" type="button" id="deposit-@account.AccountId" name="ballance-change-btn">Deposit</button>
                                     </div>
-                                    <input type="number" step="0.01" min=0 class="form-control" placeholder="0.00" aria-label="deposit" aria-describedby="deposit">
+                                    <input type="number" step="0.01" id="deposit-@account.AccountId-input" min=0 class="form-control" placeholder="0.00" aria-label="deposit" aria-describedby="deposit">
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="input-group mb-3">
-                                    <input type="number" step="0.01" min=0 class="form-control" placeholder="0.00" aria-label="withdraw" aria-describedby="withdraw">
+                                    <input type="number" step="0.01" min=0 class="form-control" id="withdrawal-@account.AccountId-input" placeholder="0.00" aria-label="withdrawal" aria-describedby="withdrawal">
                                     <div class="input-group-append">
-                                        <button class="btn btn-outline-danger" type="button" id="withdraw-@account.AccountId" name="ballance-change-btn">Withdraw</button>
+                                        <button class="btn btn-outline-danger" type="button" id="withdrawal-@account.AccountId" name="ballance-change-btn">withdrawal</button>
                                     </div>
                                 </div>
 
@@ -62,31 +107,13 @@
                         </div>
                         <div class="row">
                             <div class="col-12">
-                                <a data-toggle="collapse" data-target="#collapseHistory-@account.AccountId" class="text-right nodecoration"  href="#">Show transaction history <i class="fas fa-chevron-down pl-1"></i></a>
+                                <a data-toggle="collapse" data-target="#collapseHistory-@account.AccountId" class="text-right nodecoration" href="#">Show transaction history <i class="fas fa-chevron-down pl-1"></i></a>
                             </div>
                         </div>
                         <div class="collapse" id="collapseHistory-@account.AccountId">
                             <div class="row">
                                 <div class="col-12 py-1 mt-3">
-                                    <table class="table table-sm">
-                                        <thead>
-                                            <tr>
-                                                <td scope="col">Date</td>
-                                                <td scope="col">Amount</td>
-                                                <td scope="col">Ballance</td>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach (DepositViewModel deposit in account.DepositHistory)
-                                            {
-                                                <tr>
-                                                    <td>@deposit.Date.ToShortDateString()</td>
-                                                    <td>@deposit.Amount</td>
-                                                    <td>@deposit.Balance</td>
-                                                </tr>
-                                            }
-                                        </tbody>
-                                    </table>
+                                    <partial name="_DepositHistory" model="account.DepositHistory" />
                                 </div>
                             </div>
                         </div>
@@ -97,4 +124,11 @@
             </div>
         }
     </div>
+</div>
+
+<div class="alert alert-danger alert-dismissible fade show" role="alert" id="withdrawal-alert" style="display:none">
+    <strong>Error!</strong> You don't have enough funds to make this withdrawal. Ballance is <txt id="withdrawal-error"></txt>.
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
 </div>

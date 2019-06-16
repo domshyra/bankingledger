@@ -4,8 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using BankingLedger.Entities;
 using BankingLedger.Interfaces;
+using BankingLedger.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace BankingLedger.Controllers
 {
@@ -26,6 +28,22 @@ namespace BankingLedger.Controllers
 
 
             return View(_ledgerAccountProvider.GetLedgerAccountViewModelsForUser(user.Id));
+        }
+
+        public string MakeDeposit(decimal amount, int accountId)
+        {
+            string result = _ledgerAccountProvider.Deposit(amount, accountId);
+            return JsonConvert.SerializeObject(result);
+        }
+        public string MakeWithdrawal(decimal amount, int accountId)
+        {
+            return JsonConvert.SerializeObject(_ledgerAccountProvider.Withdrawal(amount, accountId));
+        }
+        public ActionResult GetDepositHistory(int accountId)
+        {
+            List<DepositViewModel> deposits = _ledgerAccountProvider.GetDepositHistory(accountId);
+
+            return PartialView("_DepositHistory", deposits);
         }
     }
 }

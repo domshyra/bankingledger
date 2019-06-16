@@ -13,7 +13,19 @@ namespace BankingLedger.Providers
 
         public IEnumerable<Account> GetAccountsForUser(Guid userId)
         {
-            return context.Accounts.Where(x => Equals(x.UserId, userId));
+            return context.Accounts.Include(x => x.Deposits).Where(x => Equals(x.UserId, userId));
+        }
+
+        public decimal GetAccountBallance(int accountId)
+        {
+            Account account = context.Accounts.Include(x => x.Deposits).FirstOrDefault(x => x.Id == accountId);
+
+            if (account == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            return account.Ballance;
         }
 
         public decimal MakeWithdrawal(decimal amount, int accountId)
@@ -66,6 +78,10 @@ namespace BankingLedger.Providers
             context.SaveChanges();
 
             return account.Ballance;
+        }
+        public IEnumerable<Deposit> GetDeposits(int accountId)
+        {
+            return context.Deposits.Where(x => x.AccountId == accountId);
         }
     }
 }

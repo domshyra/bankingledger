@@ -1,0 +1,22 @@
+﻿@using BankingLedger.ViewModels
+@model List<DepositViewModel>
+
+<table class="table table-sm">
+    <thead>
+        <tr>
+            <td scope="col">Date</td>
+            <td scope="col">Amount</td>
+            <td scope="col">Ballance</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (DepositViewModel deposit in Model)
+        {
+            <tr>
+                <td>@deposit.Date.ToShortDateString()</td>
+                <td>@deposit.Amount</td>
+                <td>@deposit.Balance</td>
+            </tr>
+        }
+    </tbody>
+</table>

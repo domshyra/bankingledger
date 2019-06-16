@@ -9,5 +9,7 @@ namespace BankingLedger.Interfaces
         IEnumerable<Account> GetAccountsForUser(Guid userId);
         decimal MakeDeposit(decimal amount, int accountId);
         decimal MakeWithdrawal(decimal amount, int accountId);
+        decimal GetAccountBallance(int accountId);
+        IEnumerable<Deposit> GetDeposits(int accountId);
     }
 }
