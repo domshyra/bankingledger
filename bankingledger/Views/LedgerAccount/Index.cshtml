@@ -77,7 +77,14 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            
+                                            @foreach (DepositViewModel deposit in account.DepositHistory)
+                                            {
+                                                <tr>
+                                                    <td>@deposit.Date.ToShortDateString()</td>
+                                                    <td>@deposit.Amount</td>
+                                                    <td>@deposit.Balance</td>
+                                                </tr>
+                                            }
                                         </tbody>
                                     </table>
                                 </div>

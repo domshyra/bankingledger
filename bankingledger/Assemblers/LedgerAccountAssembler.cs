@@ -12,7 +12,7 @@ namespace BankingLedger.Assemblers
             return new LedgerAccountViewModel
             {
                 AccountId = source.Id,
-                Balance = source.Balance.ToString("C"),
+                Balance = source.Ballance.ToString("C"),
                 Name = source.Name
             };
         }

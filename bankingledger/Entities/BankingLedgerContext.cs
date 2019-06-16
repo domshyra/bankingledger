@@ -79,7 +79,7 @@ namespace BankingLedger.Entities
                 entity.Property(e => e.Name)
                     .HasMaxLength(255);
 
-                entity.Property(e => e.Balance)
+                entity.Property(e => e.Ballance)
                     .HasColumnType("decimal(18, 4)");
 
                 entity.HasOne(d => d.User)
@@ -102,6 +102,9 @@ namespace BankingLedger.Entities
                     .HasColumnType("datetime");
 
                 entity.Property(e => e.Amount)
+                    .HasColumnType("decimal(18, 4)");
+
+                entity.Property(e => e.Ballance)
                     .HasColumnType("decimal(18, 4)");
 
                 entity.HasOne(d => d.Account)

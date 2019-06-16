@@ -8,7 +8,7 @@ namespace BankingLedger.Entities
         public Guid UserId { get; set; }
         public int Id { get;  set; }
         public string Name { get; set; }
-        public decimal Balance { get; set; }
+        public decimal Ballance { get; set; }
 
 
         public virtual ApplicationUser User { get; set; }

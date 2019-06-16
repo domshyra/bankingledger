@@ -19,5 +19,14 @@ namespace BankingLedger.Providers
         {
             return _repo.GetAccountsForUser(userId).MakeLedgerAccounts();
         }
+
+        public decimal Deposit(decimal amount, int accountId)
+        {
+            return _repo.MakeDeposit(amount, accountId);
+        }
+        public decimal Withdrawal(decimal amount, int accountId)
+        {
+            return _repo.MakeDeposit(amount, accountId);
+        }
     }
 }

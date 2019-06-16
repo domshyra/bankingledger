@@ -41,5 +41,6 @@ namespace BankingLedger.Providers
             IdentityResult add = _userManager.AddToRolesAsync(applicationUser, roles).Result;
 
         }
+
     }
 }
