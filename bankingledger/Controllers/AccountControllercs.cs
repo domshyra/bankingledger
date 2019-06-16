@@ -60,22 +60,12 @@ namespace BankingLedger.Controllers
                 {
                     _logger.LogInformation("User logged in.");
 
-                    ApplicationUser loggedInUser = _userManager.GetUserAsync(User).Result;
-
-                    var bob = _userManager.GetRolesAsync(loggedInUser);
-
                     return RedirectToLocal(returnUrl);
                 }
-                if (result.IsLockedOut)
-                {
-                    _logger.LogWarning("User account locked out.");
-                    return RedirectToAction(nameof(Lockout));
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                    return View(model);
-                }
+
+                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                return View(model);
+
             }
 
             // If we got this far, something failed, redisplay form
@@ -83,47 +73,6 @@ namespace BankingLedger.Controllers
         }
 
 
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult Lockout()
-        {
-            return View();
-        }
-
-        //[HttpGet]
-        //[AllowAnonymous]
-        //public IActionResult Register(string returnUrl)
-        //{
-        //    ViewData["ReturnUrl"] = returnUrl;
-        //    return View();
-        //}
-
-        //[HttpPost]
-        //[AllowAnonymous]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl)
-        //{
-        //    ViewData["ReturnUrl"] = returnUrl;
-        //    if (ModelState.IsValid)
-        //    {
-        //        var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-        //        var result = await _userManager.CreateAsync(user, model.Password);
-        //        if (result.Succeeded)
-        //        {
-        //            _logger.LogInformation("User created a new account with password.");
-
-        //            var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-
-        //            await _signInManager.SignInAsync(user, isPersistent: false);
-        //            _logger.LogInformation("User created a new account with password.");
-        //            return RedirectToLocal(returnUrl);
-        //        }
-        //        AddErrors(result);
-        //    }
-
-        //    // If we got this far, something failed, redisplay form
-        //    return View(model);
-        //}
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -131,7 +80,6 @@ namespace BankingLedger.Controllers
         {
             await _signInManager.SignOutAsync();
             _logger.LogInformation("User logged out.");
-            //return RedirectToAction(nameof(HomeController.Index), "Estimates");
             return RedirectToAction("Index", "Home");
         }
 
@@ -147,7 +95,7 @@ namespace BankingLedger.Controllers
             return Challenge(properties, provider);
         }
 
-        
+
         [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> ExternalLoginCallback(string returnUrl = null, string remoteError = null)
